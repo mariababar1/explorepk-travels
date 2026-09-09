@@ -1,13 +1,37 @@
+import { useEffect, useRef } from "react";
+
 function Hero() {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) return;
+
+    const handleTimeUpdate = () => {
+      if (video.currentTime >= 10) {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      }
+    };
+
+    video.addEventListener("timeupdate", handleTimeUpdate);
+
+    return () => {
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+    };
+  }, []);
+
   return (
     <section className="hero" id="home">
 
       <video
+        ref={videoRef}
         className="hero-video"
         autoPlay
         muted
-        loop
         playsInline
+        preload="metadata"
       >
         <source src="/videos/travel.mp4" type="video/mp4" />
       </video>
@@ -25,12 +49,10 @@ function Hero() {
 
         <div className="hero-buttons">
 
-          {/* Explore Now */}
           <a href="#destinations" className="hero-btn">
             Explore Now
           </a>
 
-          {/* View Packages */}
           <a href="#packages" className="hero-btn">
             View Packages
           </a>
