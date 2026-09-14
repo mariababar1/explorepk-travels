@@ -1,26 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 function Hero() {
   const videoRef = useRef(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-
-    if (!video) return;
-
-    const handleTimeUpdate = () => {
-      if (video.currentTime >= 10) {
-        video.currentTime = 0;
-        video.play().catch(() => {});
-      }
-    };
-
-    video.addEventListener("timeupdate", handleTimeUpdate);
-
-    return () => {
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-    };
-  }, []);
 
   return (
     <section className="hero" id="home">
@@ -31,7 +12,8 @@ function Hero() {
         autoPlay
         muted
         playsInline
-        preload="metadata"
+        loop
+        preload="auto"
       >
         <source src="/videos/travel.mp4" type="video/mp4" />
       </video>
