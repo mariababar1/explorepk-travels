@@ -25,7 +25,9 @@ function Booking() {
 };
 
     try {
-  const response = await fetch("/api/bookings", {
+  const response = await fetch(
+  "https://explorepk-travels-backend.vercel.app/api/bookings",
+  { 
     method: "POST",
     headers: {
       "Content-Type": "application/json",

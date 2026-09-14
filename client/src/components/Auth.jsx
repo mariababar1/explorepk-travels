@@ -23,7 +23,7 @@ function Auth({ onLogin }) {
         : { name, email, password };
 
       const response = await fetch(
-  "/api/auth/" + endpoint,
+  "https://explorepk-travels-backend.vercel.app/api/auth/" + endpoint,
   {
     method: "POST",
     headers: {
