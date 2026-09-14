@@ -11163,3 +11163,57 @@ video {
     display: none !important;
   }
 }
+/* =========================================
+   FINAL HERO VIDEO FIX
+========================================= */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Video ko background layer rakho */
+.hero .hero-video {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Dark layer */
+.hero .hero-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+/* Text + buttons video ke upar */
+.hero .hero-content {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Buttons clickable rahen */
+.hero .hero-buttons {
+  position: relative;
+  z-index: 3;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .hero .hero-video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .hero {
+    overflow: hidden !important;
+  }
+}
