@@ -1,5 +1,9 @@
+import { useState } from "react";
+
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
+import LoadingScreen from "./components/LoadingScreen";
+import Auth from "./components/Auth";
 
 import Destinations from "./pages/destination";
 import Packages from "./pages/packages";
@@ -9,41 +13,53 @@ import Contact from "./pages/contact";
 import Booking from "./pages/booking2";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+  };
+
+  const handleLogin = (loggedInUser) => {
+    setUser(loggedInUser);
+  };
+
+  if (isLoading) {
+    return <LoadingScreen onComplete={handleLoadingComplete} />;
+  }
+
+  if (!user) {
+    return <Auth onLogin={handleLogin} />;
+  }
+
   return (
     <>
       <Navbar />
 
-      {/* HOME */}
       <section id="home">
         <Hero />
       </section>
 
-      {/* DESTINATIONS */}
       <section id="destinations">
         <Destinations />
       </section>
 
-      {/* PACKAGES */}
       <section id="packages">
         <Packages />
       </section>
 
-      {/* GALLERY */}
       <section id="gallery">
         <Gallery />
       </section>
 
-      {/* ABOUT */}
       <section id="about">
         <About />
       </section>
 
-      {/* CONTACT */}
       <section id="contact">
         <Contact />
       </section>
 
-      {/* BOOKING */}
       <section id="booking">
         <Booking />
       </section>

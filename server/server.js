@@ -4,12 +4,14 @@ const cors = require("cors");
 require("dotenv").config();
 
 const Booking = require("./models/Booking");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/auth", authRoutes);
 
 // MongoDB Connection
 mongoose
@@ -67,9 +69,13 @@ app.get("/api/bookings", async (req, res) => {
   }
 });
 
-// Server
-const PORT = 5000;
+// Local server
+if (require.main === module) {
+  const PORT = 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

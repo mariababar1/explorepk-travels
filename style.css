@@ -3409,3 +3409,55 @@ transform:translateX(360%);
     color:#d9d9d9;
     font-size:17px;
 }
+/* MOBILE NAVBAR FIX */
+
+@media (max-width: 768px) {
+
+  .navbar {
+    position: relative;
+    z-index: 9999;
+  }
+
+  .menu-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10001;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .nav-links {
+    display: none !important;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    flex-direction: column;
+    padding: 20px 0;
+    margin: 0;
+    z-index: 10000;
+  }
+
+  .nav-links.active {
+    display: flex !important;
+  }
+
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-links li a {
+    display: block;
+    width: 100%;
+    padding: 14px 10px;
+    box-sizing: border-box;
+  }
+
+  .book-btn {
+    display: none;
+  }
+}

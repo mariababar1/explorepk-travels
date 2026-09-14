@@ -9,9 +9,13 @@ function Navbar() {
   };
 
   return (
-    <header className="navbar">
-
-      {/* LOGO */}
+    <header
+      className="navbar"
+      style={{
+        position: "relative",
+        zIndex: 9999,
+      }}
+    >
       <div className="logo">
         <img src={logo} alt="ExplorePK Logo" />
 
@@ -21,24 +25,33 @@ function Navbar() {
         </div>
       </div>
 
-      {/* NAVIGATION */}
       <nav>
-        <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-
+        <ul
+          className="nav-links"
+          style={{
+            display: menuOpen ? "flex" : undefined,
+          }}
+        >
           <li>
             <a href="#home" onClick={closeMenu}>Home</a>
           </li>
 
           <li>
-            <a href="#destinations" onClick={closeMenu}>Destinations</a>
+            <a href="#destinations" onClick={closeMenu}>
+              Destinations
+            </a>
           </li>
 
           <li>
-            <a href="#packages" onClick={closeMenu}>Packages</a>
+            <a href="#packages" onClick={closeMenu}>
+              Packages
+            </a>
           </li>
 
           <li>
-            <a href="#gallery" onClick={closeMenu}>Gallery</a>
+            <a href="#gallery" onClick={closeMenu}>
+              Gallery
+            </a>
           </li>
 
           <li>
@@ -52,25 +65,32 @@ function Navbar() {
           <li>
             <a href="#booking" onClick={closeMenu}>Booking</a>
           </li>
-
         </ul>
       </nav>
 
-      {/* BOOK NOW */}
-      <a href="#booking" className="book-btn" onClick={closeMenu}>
+      <a
+        href="#booking"
+        className="book-btn"
+        onClick={closeMenu}
+      >
         <span>Book Now</span>
         <b>↗</b>
       </a>
 
-      {/* MOBILE MENU */}
       <button
+        type="button"
         className="menu-toggle"
         onClick={() => setMenuOpen(!menuOpen)}
-        aria-label="Toggle menu"
+        style={{
+          position: "relative",
+          zIndex: 999999,
+          pointerEvents: "auto",
+          cursor: "pointer",
+        }}
+        aria-label="Toggle navigation"
       >
-        ☰
+        {menuOpen ? "✕" : "☰"}
       </button>
-
     </header>
   );
 }
