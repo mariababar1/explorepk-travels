@@ -11,24 +11,50 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+let mongoConnection = null;
+
+async function connectDB() {
+  if (mongoose.connection.readyState === 1) {
+    return;
+  }
+
+  if (!mongoConnection) {
+    mongoConnection = mongoose
+      .connect(process.env.MONGO_URI, {
+        serverSelectionTimeoutMS: 10000,
+      })
+      .then(() => {
+        console.log("MongoDB Connected Successfully!");
+      })
+      .catch((error) => {
+        mongoConnection = null;
+        console.log("MongoDB Connection Error:", error.message);
+        throw error;
+      });
+  }
+
+  await mongoConnection;
+}
+
+// Make sure MongoDB is connected before ANY API request
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    return res.status(503).json({
+      success: false,
+      message: "Database connection failed.",
+    });
+  }
+});
+
 app.use("/api/auth", authRoutes);
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("MongoDB Connected Successfully!");
-  })
-  .catch((error) => {
-    console.log("MongoDB Connection Error:", error.message);
-  });
-
-// Test route
 app.get("/", (req, res) => {
   res.send("ExplorePK Travel Server is Running!");
 });
 
-// Create Booking
 app.post("/api/bookings", async (req, res) => {
   try {
     const booking = new Booking(req.body);
@@ -51,7 +77,6 @@ app.post("/api/bookings", async (req, res) => {
   }
 });
 
-// Get all bookings
 app.get("/api/bookings", async (req, res) => {
   try {
     const bookings = await Booking.find().sort({ createdAt: -1 });
@@ -69,7 +94,6 @@ app.get("/api/bookings", async (req, res) => {
   }
 });
 
-// Local server
 if (require.main === module) {
   const PORT = 5000;
 
