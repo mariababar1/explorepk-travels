@@ -1,53 +1,211 @@
-
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import { useEffect, useState } from "react";
+
 import hunza from "../assets/images/hunza.jpg";
 import skardu from "../assets/images/skardu.jpg";
-import nelum from "../assets/images/nelum.jpg";
+import nelum from "../assets/images/neelum-valley.jpg";
 import saif from "../assets/images/saifulmalook.jpg";
 import map from "../assets/images/map.jpg";
 
+// =================================================
+// LEAFLET MARKER FIX
+// =================================================
+
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
+
+  iconUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
+
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+});
+
+// =================================================
+// DESTINATION DATA
+// =================================================
+
+const destinationData = [
+  {
+    name: "Hunza Valley",
+    image: hunza,
+    type: "MOUNTAIN ESCAPE",
+    location: "Gilgit-Baltistan",
+
+    description:
+      "A breathtaking valley surrounded by majestic mountains, peaceful villages and unforgettable views.",
+
+    modalDescription:
+      "Discover the breathtaking beauty of Hunza Valley, surrounded by majestic mountains, peaceful villages and unforgettable landscapes.",
+
+    coordinates: [36.3167, 74.65],
+
+    bestTime: "April – October",
+  },
+
+  {
+    name: "Skardu",
+    image: skardu,
+    type: "ADVENTURE",
+    location: "Gilgit-Baltistan",
+
+    description:
+      "Explore dramatic mountain ranges, crystal-clear lakes and some of Pakistan's most stunning landscapes.",
+
+    modalDescription:
+      "Explore the dramatic mountains, crystal-clear lakes and unforgettable landscapes of beautiful Skardu.",
+
+    coordinates: [35.3, 75.63],
+
+    bestTime: "May – October",
+  },
+
+  {
+    name: "Neelum Valley",
+    image: nelum,
+    type: "NATURE RETREAT",
+    location: "Azad Kashmir",
+
+    description:
+      "Lose yourself in lush green valleys, flowing rivers and peaceful scenery surrounded by mountains.",
+
+    modalDescription:
+      "Experience lush green valleys, flowing rivers and peaceful mountain scenery in the beautiful Neelum Valley.",
+
+    coordinates: [34.5858, 73.907],
+
+    bestTime: "April – October",
+  },
+
+  {
+    name: "Saif-ul-Malook",
+    image: saif,
+    type: "ALPINE BEAUTY",
+    location: "Naran, Kaghan",
+
+    description:
+      "Discover the magical alpine lake surrounded by spectacular peaks and breathtaking natural beauty.",
+
+    modalDescription:
+      "Discover the magical Saif-ul-Malook Lake surrounded by spectacular peaks and breathtaking natural beauty.",
+
+    coordinates: [34.876, 73.651],
+
+    bestTime: "May – September",
+  },
+];
+
+// =================================================
+// DESTINATIONS COMPONENT
+// =================================================
+
 function Destinations() {
+
   const [destinations, setDestinations] = useState(0);
+
   const [rating, setRating] = useState(0);
-  const [selectedDestination, setSelectedDestination] = useState(null);
+
+  const [selectedDestination, setSelectedDestination] =
+    useState(null);
+
+
+  // =================================================
+  // DESTINATION COUNTER
+  // =================================================
 
   useEffect(() => {
-    let destinationTimer;
-    let ratingTimer;
 
     let destinationCount = 0;
-    let ratingCount = 0;
 
-    destinationTimer = setInterval(() => {
+    const destinationTimer = setInterval(() => {
+
       destinationCount += 1;
 
-      if (destinationCount >= 10) {
-        destinationCount = 10;
+      if (destinationCount >= 4) {
+
+        destinationCount = 4;
+
         clearInterval(destinationTimer);
       }
 
       setDestinations(destinationCount);
-    }, 100);
 
-    ratingTimer = setInterval(() => {
-      ratingCount += 0.1;
+    }, 120);
 
-      if (ratingCount >= 4.9) {
-        ratingCount = 4.9;
-        clearInterval(ratingTimer);
-      }
-
-      setRating(Number(ratingCount.toFixed(1)));
-    }, 80);
 
     return () => {
       clearInterval(destinationTimer);
-      clearInterval(ratingTimer);
     };
+
   }, []);
 
+
+  // =================================================
+  // RATING COUNTER
+  // =================================================
+
+  useEffect(() => {
+
+    let ratingCount = 0;
+
+    const ratingTimer = setInterval(() => {
+
+      ratingCount += 0.1;
+
+      if (ratingCount >= 4.9) {
+
+        ratingCount = 4.9;
+
+        clearInterval(ratingTimer);
+      }
+
+      setRating(
+        Number(ratingCount.toFixed(1))
+      );
+
+    }, 80);
+
+
+    return () => {
+      clearInterval(ratingTimer);
+    };
+
+  }, []);
+
+
+  // =================================================
+  // OPEN DESTINATION
+  // =================================================
+
+  const openDestination = (destination) => {
+
+    setSelectedDestination(destination);
+
+  };
+
+
+  // =================================================
+  // CLOSE DESTINATION
+  // =================================================
+
+  const closeDestination = () => {
+
+    setSelectedDestination(null);
+
+  };
+
+
   return (
-    <section className="destinations" id="destinations">
+
+    <section
+      className="destinations"
+      id="destinations"
+    >
 
       {/* =================================================
           LARGE MAP - LEFT
@@ -55,24 +213,44 @@ function Destinations() {
 
       <div className="destination-map map-left">
 
-        <img src={map} alt="" />
+        <img
+          src={map}
+          alt=""
+        />
 
         <div className="map-overlay"></div>
 
+
         <div className="map-route route-left">
+
           <span className="route-dot"></span>
+
           <span className="route-dot"></span>
+
           <span className="route-dot"></span>
+
         </div>
+
 
         <div className="map-pin pin-hunza">
+
           <span></span>
-          <small>HUNZA</small>
+
+          <small>
+            HUNZA
+          </small>
+
         </div>
 
+
         <div className="map-pin pin-skardu">
+
           <span></span>
-          <small>SKARDU</small>
+
+          <small>
+            SKARDU
+          </small>
+
         </div>
 
       </div>
@@ -84,31 +262,51 @@ function Destinations() {
 
       <div className="destination-map map-right">
 
-        <img src={map} alt="" />
+        <img
+          src={map}
+          alt=""
+        />
 
         <div className="map-overlay"></div>
 
+
         <div className="map-route route-right">
+
           <span className="route-dot"></span>
+
           <span className="route-dot"></span>
+
           <span className="route-dot"></span>
+
         </div>
+
 
         <div className="map-pin pin-neelum">
+
           <span></span>
-          <small>NEELUM</small>
+
+          <small>
+            NEELUM
+          </small>
+
         </div>
 
+
         <div className="map-pin pin-naran">
+
           <span></span>
-          <small>NARAN</small>
+
+          <small>
+            NARAN
+          </small>
+
         </div>
 
       </div>
 
 
       {/* =================================================
-          LARGE AIRPLANES
+          AIRPLANES
       ================================================= */}
 
       <div className="destination-airplane airplane-left">
@@ -130,20 +328,34 @@ function Destinations() {
 
 
       {/* =================================================
-          LARGE COMPASS
+          COMPASS
       ================================================= */}
 
       <div className="destination-compass">
 
         <div className="compass-inner">
-          <span className="north">N</span>
-          <span className="east">E</span>
-          <span className="south">S</span>
-          <span className="west">W</span>
+
+          <span className="north">
+            N
+          </span>
+
+          <span className="east">
+            E
+          </span>
+
+          <span className="south">
+            S
+          </span>
+
+          <span className="west">
+            W
+          </span>
+
 
           <div className="compass-arrow">
             ◆
           </div>
+
         </div>
 
       </div>
@@ -159,9 +371,17 @@ function Destinations() {
           01
         </span>
 
+
         <div>
-          <strong>Hunza Valley</strong>
-          <small>2,438m elevation</small>
+
+          <strong>
+            Hunza Valley
+          </strong>
+
+          <small>
+            2,438m elevation
+          </small>
+
         </div>
 
       </div>
@@ -173,24 +393,49 @@ function Destinations() {
           02
         </span>
 
+
         <div>
-          <strong>Skardu</strong>
-          <small>Mountain Paradise</small>
+
+          <strong>
+            Skardu
+          </strong>
+
+          <small>
+            Mountain Paradise
+          </small>
+
         </div>
 
       </div>
 
 
       {/* =================================================
-          DECORATIVE PARTICLES
+          PARTICLES
       ================================================= */}
 
-      <div className="destination-particle particle-one">✦</div>
-      <div className="destination-particle particle-two">✧</div>
-      <div className="destination-particle particle-three">✦</div>
-      <div className="destination-particle particle-four">✧</div>
-      <div className="destination-particle particle-five">·</div>
-      <div className="destination-particle particle-six">·</div>
+      <div className="destination-particle particle-one">
+        ✦
+      </div>
+
+      <div className="destination-particle particle-two">
+        ✧
+      </div>
+
+      <div className="destination-particle particle-three">
+        ✦
+      </div>
+
+      <div className="destination-particle particle-four">
+        ✧
+      </div>
+
+      <div className="destination-particle particle-five">
+        ·
+      </div>
+
+      <div className="destination-particle particle-six">
+        ·
+      </div>
 
 
       {/* =================================================
@@ -200,57 +445,179 @@ function Destinations() {
       <div className="destination-content-wrapper">
 
 
-        {/* =========================
+        {/* =================================================
             HEADING
-        ========================= */}
+        ================================================= */}
 
         <div className="destination-heading">
 
           <div className="heading-eyebrow">
+
             <span></span>
+
             EXPLORE PAKISTAN
+
             <span></span>
+
           </div>
 
+
           <h1>
+
             Find Your Next
+
             <br />
-            <em>Beautiful Escape</em>
+
+            <em>
+              Beautiful Escape
+            </em>
+
           </h1>
 
+
           <p>
+
             From majestic northern mountains to peaceful valleys,
             discover Pakistan's most unforgettable destinations.
             Choose a place, start your journey and create memories
             that last forever.
+
           </p>
 
         </div>
 
 
-        {/* =========================
-            DESTINATION STATS
-        ========================= */}
+        {/* =================================================
+            STATS
+        ================================================= */}
 
         <div className="destination-stats">
 
+
           <div className="stat-item">
-            <strong>{destinations}+</strong>
-            <span>Destinations</span>
+
+            <strong>
+              {destinations}+
+            </strong>
+
+            <span>
+              Destinations
+            </span>
+
           </div>
+
 
           <div className="stat-divider"></div>
 
+
           <div className="stat-item">
-            <strong>{rating}</strong>
-            <span>Traveler Rating</span>
+
+            <strong>
+              {rating}
+            </strong>
+
+            <span>
+              Traveler Rating
+            </span>
+
           </div>
+
 
           <div className="stat-divider"></div>
 
+
           <div className="stat-item">
-            <strong>24/7</strong>
-            <span>Travel Support</span>
+
+            <strong>
+              24/7
+            </strong>
+
+            <span>
+              Travel Support
+            </span>
+
+          </div>
+
+        </div>
+
+
+        {/* =================================================
+            REAL INTERACTIVE MAP
+        ================================================= */}
+
+        <div className="explore-map-section">
+
+
+          <div className="explore-map-heading">
+
+            <span>
+              ✦ EXPLORE OUR DESTINATIONS
+            </span>
+
+
+            <h2>
+
+              Discover Pakistan
+
+              <em>
+                {" "}on the map.
+              </em>
+
+            </h2>
+
+
+            <p>
+
+              Explore our featured destinations and discover
+              your next unforgettable journey.
+
+            </p>
+
+          </div>
+
+
+          <div className="explore-map">
+
+<MapContainer
+  center={[35.1, 74.2]}
+  zoom={6}
+  scrollWheelZoom={true}
+  className="real-map"
+>
+  <TileLayer
+    attribution="Tiles &copy; Esri"
+    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
+  />
+
+  {destinationData.map((destination) => (
+    <Marker
+      key={destination.name}
+      position={destination.coordinates}
+    >
+      <Popup>
+        <div className="map-popup">
+          <strong>{destination.name}</strong>
+
+          <span>
+            📍 {destination.location}
+          </span>
+
+          <small>
+            ★ 4.9 Traveler Rating
+          </small>
+
+          <button
+            onClick={() => openDestination(destination)}
+          >
+            Explore
+          </button>
+        </div>
+      </Popup>
+    </Marker>
+  ))}
+</MapContainer>
+
+
           </div>
 
         </div>
@@ -263,294 +630,267 @@ function Destinations() {
         <div className="destination-grid">
 
 
-          {/* ================= HUNZA ================= */}
+          {destinationData.map(
+            (destination, index) => (
 
-          <article className="destination-card">
+              <article
 
-            <div className="destination-image">
+                className="destination-card"
 
-              <img
-                src={hunza}
-                alt="Hunza Valley"
-              />
+                key={destination.name}
 
-              <div className="image-dark"></div>
-
-              <div className="card-number">
-                01
-              </div>
-
-              <div className="card-location">
-                📍 Gilgit-Baltistan
-              </div>
-
-            </div>
-
-            <div className="destination-card-content">
-
-              <span className="destination-type">
-                MOUNTAIN ESCAPE
-              </span>
-
-              <h3>
-                Hunza Valley
-              </h3>
-
-              <p>
-                A breathtaking valley surrounded by majestic
-                mountains, peaceful villages and unforgettable views.
-              </p>
-
-              <button onClick={() => setSelectedDestination("Hunza")}>
-  Explore
-  <span>↗</span>
-</button>
-
-            </div>
-
-          </article>
+              >
 
 
-          {/* ================= SKARDU ================= */}
-
-          <article className="destination-card">
-
-            <div className="destination-image">
-
-              <img
-                src={skardu}
-                alt="Skardu"
-              />
-
-              <div className="image-dark"></div>
-
-              <div className="card-number">
-                02
-              </div>
-
-              <div className="card-location">
-                📍 Gilgit-Baltistan
-              </div>
-
-            </div>
-
-            <div className="destination-card-content">
-
-              <span className="destination-type">
-                ADVENTURE
-              </span>
-
-              <h3>
-                Skardu
-              </h3>
-
-              <p>
-                Explore dramatic mountain ranges, crystal-clear
-                lakes and some of Pakistan's most stunning landscapes.
-              </p>
-
-<button onClick={() => setSelectedDestination("Skardu")}>
-  Explore
-  <span>↗</span>
-</button>
-
-            </div>
-
-          </article>
+                <div className="destination-image">
 
 
-          {/* ================= NEELUM ================= */}
+                  <img
 
-          <article className="destination-card">
+                    src={destination.image}
 
-            <div className="destination-image">
+                    alt={destination.name}
 
-              <img
-                src={nelum}
-                alt="Neelum Valley"
-              />
-
-              <div className="image-dark"></div>
-
-              <div className="card-number">
-                03
-              </div>
-
-              <div className="card-location">
-                📍 Azad Kashmir
-              </div>
-
-            </div>
-
-            <div className="destination-card-content">
-
-              <span className="destination-type">
-                NATURE RETREAT
-              </span>
-
-              <h3>
-                Neelum Valley
-              </h3>
-
-              <p>
-                Lose yourself in lush green valleys, flowing rivers
-                and peaceful scenery surrounded by mountains.
-              </p>
-
-              <button onClick={() => setSelectedDestination("Neelum Valley")}>
-  Explore
-  <span>↗</span>
-</button>
-
-            </div>
-
-          </article>
+                  />
 
 
-          {/* ================= SAIF UL MALOOK ================= */}
+                  <div className="image-dark"></div>
 
-          <article className="destination-card">
 
-            <div className="destination-image">
+                  <div className="card-number">
 
-              <img
-                src={saif}
-                alt="Saif-ul-Malook Lake"
-              />
+                    0{index + 1}
 
-              <div className="image-dark"></div>
+                  </div>
 
-              <div className="card-number">
-                04
-              </div>
 
-              <div className="card-location">
-                📍 Naran, Kaghan
-              </div>
+                  <div className="card-location">
 
-            </div>
+                    📍 {destination.location}
 
-            <div className="destination-card-content">
+                  </div>
 
-              <span className="destination-type">
-                ALPINE BEAUTY
-              </span>
 
-              <h3>
-                Saif-ul-Malook
-              </h3>
+                </div>
 
-              <p>
-                Discover the magical alpine lake surrounded by
-                spectacular peaks and breathtaking natural beauty.
-              </p>
 
-              <button onClick={() => setSelectedDestination("Saif-ul-Malook")}>
-  Explore
-  <span>↗</span>
-</button>
+                <div className="destination-card-content">
 
-            </div>
 
-          </article>
+                  <span className="destination-type">
+
+                    {destination.type}
+
+                  </span>
+
+
+                  <h3>
+
+                    {destination.name}
+
+                  </h3>
+
+
+                  <p>
+
+                    {destination.description}
+
+                  </p>
+
+
+                  <button
+
+                    onClick={() =>
+                      openDestination(
+                        destination
+                      )
+                    }
+
+                  >
+
+                    Explore
+
+                    <span>
+                      ↗
+                    </span>
+
+                  </button>
+
+
+                </div>
+
+
+              </article>
+
+            )
+          )}
 
 
         </div>
-{/* =================================================
-    DESTINATION POPUP
-================================================= */}
 
-{selectedDestination && (
-  <div
-    className="destination-modal-overlay"
-    onClick={() => setSelectedDestination(null)}
-  >
-    <div
-      className="destination-modal"
-      onClick={(e) => e.stopPropagation()}
-    >
 
-      {/* CLOSE BUTTON */}
-      <button
-        className="destination-modal-close"
-        onClick={() => setSelectedDestination(null)}
-      >
-        ×
-      </button>
+        {/* =================================================
+            DESTINATION POPUP
+        ================================================= */}
 
-      {/* IMAGE */}
-      <div className="destination-modal-image">
+        {selectedDestination && (
 
-        <img
-          src={
-            selectedDestination === "Hunza"
-              ? hunza
-              : selectedDestination === "Skardu"
-              ? skardu
-              : selectedDestination === "Neelum Valley"
-              ? nelum
-              : saif
-          }
-          alt={selectedDestination}
-        />
+          <div
 
-      </div>
+            className="destination-modal-overlay"
 
-      {/* CONTENT */}
-      <div className="destination-modal-content">
+            onClick={closeDestination}
 
-        <span className="destination-modal-tag">
-          ✈ EXPLORE PAKISTAN
-        </span>
+          >
 
-        <h2>{selectedDestination}</h2>
 
-        <div className="destination-modal-rating">
-          ⭐ 4.9
-          <span>Traveler Rating</span>
-        </div>
+            <div
 
-        <p>
-          {selectedDestination === "Hunza"
-            ? "Discover the breathtaking beauty of Hunza Valley, surrounded by majestic mountains, peaceful villages and unforgettable landscapes."
-            : selectedDestination === "Skardu"
-            ? "Explore the dramatic mountains, crystal-clear lakes and unforgettable landscapes of beautiful Skardu."
-            : selectedDestination === "Neelum Valley"
-            ? "Experience lush green valleys, flowing rivers and peaceful mountain scenery in the beautiful Neelum Valley."
-            : "Discover the magical Saif-ul-Malook Lake surrounded by spectacular peaks and breathtaking natural beauty."}
-        </p>
+              className="destination-modal"
 
-        <div className="destination-modal-info">
+              onClick={(e) =>
+                e.stopPropagation()
+              }
 
-          <div>
-            <strong>📍 Location</strong>
-            <span>
-              {selectedDestination === "Hunza" ||
-              selectedDestination === "Skardu"
-                ? "Gilgit-Baltistan"
-                : selectedDestination === "Neelum Valley"
-                ? "Azad Kashmir"
-                : "Naran, Kaghan"}
-            </span>
+            >
+
+
+              {/* CLOSE */}
+
+              <button
+
+                className="destination-modal-close"
+
+                onClick={closeDestination}
+
+              >
+
+                ×
+
+              </button>
+
+
+              {/* IMAGE */}
+
+              <div className="destination-modal-image">
+
+
+                <img
+
+                  src={
+                    selectedDestination.image
+                  }
+
+                  alt={
+                    selectedDestination.name
+                  }
+
+                />
+
+
+              </div>
+
+
+              {/* CONTENT */}
+
+              <div className="destination-modal-content">
+
+
+                <span className="destination-modal-tag">
+
+                  ✈ EXPLORE PAKISTAN
+
+                </span>
+
+
+                <h2>
+
+                  {selectedDestination.name}
+
+                </h2>
+
+
+                <div className="destination-modal-rating">
+
+                  ⭐ 4.9
+
+                  <span>
+                    Traveler Rating
+                  </span>
+
+                </div>
+
+
+                <p>
+
+                  {
+                    selectedDestination.modalDescription
+                  }
+
+                </p>
+
+
+                <div className="destination-modal-info">
+
+
+                  <div>
+
+                    <strong>
+                      📍 Location
+                    </strong>
+
+                    <span>
+                      {selectedDestination.location}
+                    </span>
+
+                  </div>
+
+
+                  <div>
+
+                    <strong>
+                      🌤 Best Time
+                    </strong>
+
+                    <span>
+                      {selectedDestination.bestTime}
+                    </span>
+
+                  </div>
+
+
+                </div>
+
+
+                <a
+
+                  href="#packages"
+
+                  className="destination-modal-button"
+
+                  onClick={closeDestination}
+
+                >
+
+                  View Packages
+
+                  <span>
+                    ↗
+                  </span>
+
+                </a>
+
+
+              </div>
+
+
+            </div>
+
+
           </div>
 
-          <div>
-            <strong>🌤 Best Time</strong>
-            <span>April – October</span>
-          </div>
+        )}
 
-        </div>
-
-        <a href="#packages" className="destination-modal-button">
-  View Packages
-  <span>↗</span>
-</a>
-
-      </div>
-
-    </div>
-  </div>
-)}
 
         {/* =================================================
             BOTTOM TRAVEL MESSAGE
@@ -558,13 +898,19 @@ function Destinations() {
 
         <div className="destination-footer">
 
+
           <div className="footer-line"></div>
+
 
           <span>
+
             ✈ YOUR JOURNEY STARTS HERE
+
           </span>
 
+
           <div className="footer-line"></div>
+
 
         </div>
 
@@ -572,6 +918,7 @@ function Destinations() {
       </div>
 
     </section>
+
   );
 }
 

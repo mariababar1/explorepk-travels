@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import hunza from "../assets/images/hunza.jpg";
 import skardu from "../assets/images/skardu.jpg";
-import nelum from "../assets/images/nelum.jpg";
+import nelum from "../assets/images/neelum-valley.jpg";
 import saif from "../assets/images/saifulmalook.jpg";
 
 function Packages() {

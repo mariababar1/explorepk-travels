@@ -1,12 +1,20 @@
 import { useState } from "react";
+import Auth from "../components/Auth";
 
-function Booking() {
+function Booking({ user, onLogin }) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showAuth, setShowAuth] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Login required before booking
+    if (!user) {
+      setShowAuth(true);
+      return;
+    }
 
     setLoading(true);
     setError("");
@@ -14,26 +22,27 @@ function Booking() {
     const form = e.target;
 
     const bookingData = {
-        fullName: form.name.value,
-  phone: form.phone.value,
-  email: form.email.value,
-  destination: form.destination.value,
-  travelers: form.travelers.value,
-  travelDate: form.travelDate.value,
-  package: form.package.value,
-  specialRequests: form.specialRequests.value,
-};
+      fullName: form.name.value,
+      phone: form.phone.value,
+      email: form.email.value,
+      destination: form.destination.value,
+      travelers: form.travelers.value,
+      travelDate: form.travelDate.value,
+      package: form.package.value,
+      specialRequests: form.specialRequests.value,
+    };
 
     try {
-  const response = await fetch(
-  "https://explorepk-travels-backend.vercel.app/api/bookings",
-  { 
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(bookingData),
-  });
+      const response = await fetch(
+        "https://explorepk-travels-backend.vercel.app/api/bookings",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bookingData),
+        }
+      );
 
       const data = await response.json();
 
@@ -47,8 +56,9 @@ function Booking() {
       form.reset();
     } catch (err) {
       console.error("Booking Error:", err);
+
       setError(
-        "Booking submit nahi hui. Please check that your server is running."
+        "Booking submit nahi hui. Please try again."
       );
     } finally {
       setLoading(false);
@@ -67,7 +77,6 @@ function Booking() {
 
       <div className="booking-container">
 
-        {/* HEADING */}
         <div className="booking-heading">
           <span className="booking-kicker">
             <i></i>
@@ -87,10 +96,8 @@ function Booking() {
           </p>
         </div>
 
-        {/* MAIN */}
         <div className="booking-layout">
 
-          {/* LEFT */}
           <div className="booking-info">
 
             <div className="booking-info-top">
@@ -155,7 +162,6 @@ function Booking() {
 
           </div>
 
-          {/* FORM */}
           <div className="booking-form-card">
 
             <div className="form-card-heading">
@@ -201,7 +207,6 @@ function Booking() {
 
               <form onSubmit={handleSubmit}>
 
-                {/* NAME + PHONE */}
                 <div className="form-row">
 
                   <div className="form-group">
@@ -228,7 +233,6 @@ function Booking() {
 
                 </div>
 
-                {/* EMAIL */}
                 <div className="form-group">
                   <label>EMAIL ADDRESS</label>
 
@@ -240,7 +244,6 @@ function Booking() {
                   />
                 </div>
 
-                {/* DESTINATION + TRAVELERS */}
                 <div className="form-row">
 
                   <div className="form-group">
@@ -257,11 +260,8 @@ function Booking() {
 
                       <option>Hunza Valley</option>
                       <option>Skardu</option>
-                      <option>Swat Valley</option>
-                      <option>Naran & Kaghan</option>
                       <option>Neelum Valley</option>
-                      <option>Fairy Meadows</option>
-                      <option>Other</option>
+                      <option>Saif-ul-Malook</option>
                     </select>
                   </div>
 
@@ -287,7 +287,6 @@ function Booking() {
 
                 </div>
 
-                {/* DATE + PACKAGE */}
                 <div className="form-row">
 
                   <div className="form-group">
@@ -322,7 +321,6 @@ function Booking() {
 
                 </div>
 
-                {/* REQUESTS */}
                 <div className="form-group">
                   <label>SPECIAL REQUESTS</label>
 
@@ -333,7 +331,6 @@ function Booking() {
                   ></textarea>
                 </div>
 
-                {/* ERROR */}
                 {error && (
                   <p
                     style={{
@@ -345,7 +342,6 @@ function Booking() {
                   </p>
                 )}
 
-                {/* SUBMIT */}
                 <div className="form-bottom">
 
                   <p>
@@ -375,7 +371,6 @@ function Booking() {
           </div>
         </div>
 
-        {/* BOTTOM */}
         <div className="booking-bottom">
           <span>✦</span>
 
@@ -388,6 +383,33 @@ function Booking() {
         </div>
 
       </div>
+
+      {/* LOGIN / REGISTER POPUP */}
+
+      {showAuth && (
+        <div className="auth-popup-overlay">
+
+          <div className="auth-popup">
+
+            <button
+              className="auth-popup-close"
+              onClick={() => setShowAuth(false)}
+            >
+              ×
+            </button>
+
+            <Auth
+              onLogin={(loggedInUser) => {
+                onLogin(loggedInUser);
+                setShowAuth(false);
+              }}
+            />
+
+          </div>
+
+        </div>
+      )}
+
     </section>
   );
 }

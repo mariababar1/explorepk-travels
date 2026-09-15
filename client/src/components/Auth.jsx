@@ -23,15 +23,15 @@ function Auth({ onLogin }) {
         : { name, email, password };
 
       const response = await fetch(
-  "https://explorepk-travels-backend.vercel.app/api/auth/" + endpoint,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  }
-);
+        "https://explorepk-travels-backend.vercel.app/api/auth/" + endpoint,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
 
       const data = await response.json();
 
@@ -41,7 +41,7 @@ function Auth({ onLogin }) {
         return;
       }
 
-      
+      localStorage.setItem("explorepkToken", data.token);
 
       setMessage(
         isLogin
@@ -51,9 +51,10 @@ function Auth({ onLogin }) {
 
       setTimeout(() => {
         onLogin(data.user);
-      }, 1000);
+      }, 700);
+
     } catch (error) {
-      console.error(error);
+      console.error("Authentication Error:", error);
       setMessage("Unable to connect to server.");
     }
 
@@ -80,7 +81,7 @@ function Auth({ onLogin }) {
           {isLogin ? "Welcome Back" : "Begin Your Journey"}
         </h2>
 
-        localStorage.setItem("explorepkToken", data.token);<p className="auth-description">
+        <p className="auth-description">
           {isLogin
             ? "Login to continue your journey with ExplorePK."
             : "Create your account and discover Pakistan."}
