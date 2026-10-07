@@ -7,19 +7,11 @@ function Booking({ user, onLogin }) {
   const [error, setError] = useState("");
   const [showAuth, setShowAuth] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // ================= BOOKING SUBMIT =================
 
-    // Login required before booking
-    if (!user) {
-      setShowAuth(true);
-      return;
-    }
-
+  const submitBooking = async (form) => {
     setLoading(true);
     setError("");
-
-    const form = e.target;
 
     const bookingData = {
       fullName: form.name.value,
@@ -47,7 +39,9 @@ function Booking({ user, onLogin }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Booking failed");
+        throw new Error(
+          data.message || "Booking failed"
+        );
       }
 
       console.log("Booking saved:", data);
@@ -65,19 +59,59 @@ function Booking({ user, onLogin }) {
     }
   };
 
+  // ================= FORM SUBMIT =================
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+
+    // User login nahi hai
+    if (!user) {
+      setShowAuth(true);
+      return;
+    }
+
+    // User already logged in hai
+    await submitBooking(form);
+  };
+
+  // ================= AFTER LOGIN =================
+
+  const handleAuthLogin = (loggedInUser) => {
+    onLogin(loggedInUser);
+    setShowAuth(false);
+  };
+
   return (
-    <section className="luxury-booking" id="booking">
+    <section
+      className="luxury-booking"
+      id="booking"
+    >
+
+      {/* Decorative elements */}
 
       <div className="booking-orbit booking-orbit-one"></div>
       <div className="booking-orbit booking-orbit-two"></div>
 
-      <div className="booking-spark spark-one">✦</div>
-      <div className="booking-spark spark-two">✧</div>
-      <div className="booking-spark spark-three">◇</div>
+      <div className="booking-spark spark-one">
+        ✦
+      </div>
+
+      <div className="booking-spark spark-two">
+        ✧
+      </div>
+
+      <div className="booking-spark spark-three">
+        ◇
+      </div>
 
       <div className="booking-container">
 
+        {/* ================= HEADING ================= */}
+
         <div className="booking-heading">
+
           <span className="booking-kicker">
             <i></i>
             PLAN YOUR ESCAPE
@@ -90,18 +124,26 @@ function Booking({ user, onLogin }) {
           </h2>
 
           <p>
-            Tell us where you want to go. We'll take care of the
-            details and create an unforgettable Pakistani adventure
-            designed around you.
+            Tell us where you want to go. We'll take care
+            of the details and create an unforgettable
+            Pakistani adventure designed around you.
           </p>
+
         </div>
 
+        {/* ================= LAYOUT ================= */}
+
         <div className="booking-layout">
+
+          {/* ================= LEFT INFO ================= */}
 
           <div className="booking-info">
 
             <div className="booking-info-top">
-              <span>EXPLOREPK TRAVELS</span>
+
+              <span>
+                EXPLOREPK TRAVELS
+              </span>
 
               <h3>
                 Travel more.
@@ -110,76 +152,150 @@ function Booking({ user, onLogin }) {
               </h3>
 
               <p>
-                From majestic mountains to peaceful valleys, our travel
-                specialists help you discover Pakistan in comfort and style.
+                From majestic mountains to peaceful valleys,
+                our travel specialists help you discover
+                Pakistan in comfort and style.
               </p>
+
             </div>
+
+            {/* BENEFITS */}
 
             <div className="booking-benefits">
 
               <div className="booking-benefit">
-                <div className="benefit-icon">✦</div>
-                <div>
-                  <h4>Personalized Trips</h4>
-                  <p>Journeys designed around your preferences.</p>
+
+                <div className="benefit-icon">
+                  ✦
                 </div>
+
+                <div>
+                  <h4>
+                    Personalized Trips
+                  </h4>
+
+                  <p>
+                    Journeys designed around your preferences.
+                  </p>
+                </div>
+
               </div>
 
               <div className="booking-benefit">
-                <div className="benefit-icon">◇</div>
-                <div>
-                  <h4>Premium Comfort</h4>
-                  <p>Comfortable travel with carefully selected stays.</p>
+
+                <div className="benefit-icon">
+                  ◇
                 </div>
+
+                <div>
+                  <h4>
+                    Premium Comfort
+                  </h4>
+
+                  <p>
+                    Comfortable travel with carefully
+                    selected stays.
+                  </p>
+                </div>
+
               </div>
 
               <div className="booking-benefit">
-                <div className="benefit-icon">∞</div>
-                <div>
-                  <h4>24/7 Assistance</h4>
-                  <p>We're here whenever you need us during your trip.</p>
+
+                <div className="benefit-icon">
+                  ∞
                 </div>
+
+                <div>
+                  <h4>
+                    24/7 Assistance
+                  </h4>
+
+                  <p>
+                    We're here whenever you need us
+                    during your trip.
+                  </p>
+                </div>
+
               </div>
 
             </div>
 
+            {/* TRUST */}
+
             <div className="booking-trust">
+
               <div>
-                <strong>500+</strong>
-                <span>TRAVELERS</span>
+                <strong>
+                  500+
+                </strong>
+
+                <span>
+                  TRAVELERS
+                </span>
               </div>
 
               <div>
-                <strong>20+</strong>
-                <span>DESTINATIONS</span>
+                <strong>
+                  20+
+                </strong>
+
+                <span>
+                  DESTINATIONS
+                </span>
               </div>
 
               <div>
-                <strong>4.9</strong>
-                <span>TRAVEL RATING</span>
+                <strong>
+                  4.9
+                </strong>
+
+                <span>
+                  TRAVEL RATING
+                </span>
               </div>
+
             </div>
 
           </div>
 
+          {/* ================= FORM CARD ================= */}
+
           <div className="booking-form-card">
 
             <div className="form-card-heading">
+
               <div>
-                <span>✦ BOOK YOUR EXPERIENCE</span>
-                <h3>Let's plan your trip</h3>
+
+                <span>
+                  ✦ BOOK YOUR EXPERIENCE
+                </span>
+
+                <h3>
+                  Let's plan your trip
+                </h3>
+
               </div>
 
-              <div className="form-number">01</div>
+              <div className="form-number">
+                01
+              </div>
+
             </div>
+
+            {/* ================= SUCCESS ================= */}
 
             {submitted ? (
 
               <div className="booking-success">
 
-                <div className="success-icon">✓</div>
+                <div className="success-icon">
+                  ✓
+                </div>
 
-                <span>REQUEST RECEIVED</span>
+                <span>
+                  REQUEST RECEIVED
+                </span>
 
                 <h3>
                   Your journey is
@@ -187,8 +303,9 @@ function Booking({ user, onLogin }) {
                 </h3>
 
                 <p>
-                  Thank you for choosing ExplorePK. Our travel consultant
-                  will contact you shortly to discuss your trip.
+                  Thank you for choosing ExplorePK.
+                  Our travel consultant will contact
+                  you shortly to discuss your trip.
                 </p>
 
                 <button
@@ -205,12 +322,19 @@ function Booking({ user, onLogin }) {
 
             ) : (
 
+              /* ================= FORM ================= */
+
               <form onSubmit={handleSubmit}>
+
+                {/* NAME + PHONE */}
 
                 <div className="form-row">
 
                   <div className="form-group">
-                    <label>FULL NAME</label>
+
+                    <label>
+                      FULL NAME
+                    </label>
 
                     <input
                       type="text"
@@ -218,10 +342,14 @@ function Booking({ user, onLogin }) {
                       placeholder="Your full name"
                       required
                     />
+
                   </div>
 
                   <div className="form-group">
-                    <label>PHONE NUMBER</label>
+
+                    <label>
+                      PHONE NUMBER
+                    </label>
 
                     <input
                       type="tel"
@@ -229,12 +357,18 @@ function Booking({ user, onLogin }) {
                       placeholder="+92 3XX XXXXXXX"
                       required
                     />
+
                   </div>
 
                 </div>
 
+                {/* EMAIL */}
+
                 <div className="form-group">
-                  <label>EMAIL ADDRESS</label>
+
+                  <label>
+                    EMAIL ADDRESS
+                  </label>
 
                   <input
                     type="email"
@@ -242,94 +376,177 @@ function Booking({ user, onLogin }) {
                     placeholder="you@example.com"
                     required
                   />
+
                 </div>
+
+                {/* DESTINATION + TRAVELERS */}
 
                 <div className="form-row">
 
                   <div className="form-group">
-                    <label>DESTINATION</label>
+
+                    <label>
+                      DESTINATION
+                    </label>
 
                     <select
                       name="destination"
                       defaultValue=""
                       required
                     >
-                      <option value="" disabled>
+
+                      <option
+                        value=""
+                        disabled
+                      >
                         Select destination
                       </option>
 
-                      <option>Hunza Valley</option>
-                      <option>Skardu</option>
-                      <option>Neelum Valley</option>
-                      <option>Saif-ul-Malook</option>
+                      <option>
+                        Hunza Valley
+                      </option>
+
+                      <option>
+                        Skardu
+                      </option>
+
+                      <option>
+                        Neelum Valley
+                      </option>
+
+                      <option>
+                        Saif-ul-Malook
+                      </option>
+
                     </select>
+
                   </div>
 
                   <div className="form-group">
-                    <label>TRAVELERS</label>
+
+                    <label>
+                      TRAVELERS
+                    </label>
 
                     <select
                       name="travelers"
                       defaultValue=""
                       required
                     >
-                      <option value="" disabled>
+
+                      <option
+                        value=""
+                        disabled
+                      >
                         Number of travelers
                       </option>
 
-                      <option>1 Traveler</option>
-                      <option>2 Travelers</option>
-                      <option>3 Travelers</option>
-                      <option>4 Travelers</option>
-                      <option>5+ Travelers</option>
+                      <option>
+                        1 Traveler
+                      </option>
+
+                      <option>
+                        2 Travelers
+                      </option>
+
+                      <option>
+                        3 Travelers
+                      </option>
+
+                      <option>
+                        4 Travelers
+                      </option>
+
+                      <option>
+                        5+ Travelers
+                      </option>
+
                     </select>
+
                   </div>
 
                 </div>
 
+                {/* DATE + PACKAGE */}
+
                 <div className="form-row">
 
                   <div className="form-group">
-                    <label>TRAVEL DATE</label>
+
+                    <label>
+                      TRAVEL DATE
+                    </label>
 
                     <input
                       type="date"
                       name="travelDate"
                       required
                     />
+
                   </div>
 
                   <div className="form-group">
-                    <label>PACKAGE</label>
+
+                    <label>
+                      PACKAGE
+                    </label>
 
                     <select
                       name="package"
                       defaultValue=""
                       required
                     >
-                      <option value="" disabled>
+
+                      <option
+                        value=""
+                        disabled
+                      >
                         Select package
                       </option>
 
-                      <option>Luxury Escape</option>
-                      <option>Mountain Adventure</option>
-                      <option>Family Getaway</option>
-                      <option>Romantic Escape</option>
-                      <option>Custom Trip</option>
+                      <option>
+                        Luxury Escape
+                      </option>
+
+                      <option>
+                        Mountain Adventure
+                      </option>
+
+                      <option>
+                        Family Getaway
+                      </option>
+
+                      <option>
+                        Romantic Escape
+                      </option>
+
+                      <option>
+                        Custom Trip
+                      </option>
+
                     </select>
+
                   </div>
 
                 </div>
 
+                {/* SPECIAL REQUESTS */}
+
                 <div className="form-group">
-                  <label>SPECIAL REQUESTS</label>
+
+                  <label>
+                    SPECIAL REQUESTS
+                  </label>
 
                   <textarea
                     name="specialRequests"
                     rows="4"
                     placeholder="Tell us anything you'd like us to know..."
                   ></textarea>
+
                 </div>
+
+                {/* ERROR */}
 
                 {error && (
                   <p
@@ -342,11 +559,17 @@ function Booking({ user, onLogin }) {
                   </p>
                 )}
 
+                {/* FORM BOTTOM */}
+
                 <div className="form-bottom">
 
                   <p>
-                    <span>🔒</span>
-                    Your information is kept private and secure.
+                    <span>
+                      🔒
+                    </span>
+
+                    Your information is kept private
+                    and secure.
                   </p>
 
                   <button
@@ -354,13 +577,17 @@ function Booking({ user, onLogin }) {
                     className="booking-submit"
                     disabled={loading}
                   >
+
                     <span>
                       {loading
                         ? "SUBMITTING..."
                         : "REQUEST MY TRIP"}
                     </span>
 
-                    <b>↗</b>
+                    <b>
+                      ↗
+                    </b>
+
                   </button>
 
                 </div>
@@ -369,45 +596,58 @@ function Booking({ user, onLogin }) {
             )}
 
           </div>
+
         </div>
 
+        {/* ================= BOTTOM ================= */}
+
         <div className="booking-bottom">
-          <span>✦</span>
+
+          <span>
+            ✦
+          </span>
 
           <p>
-            Every great journey starts with a single decision.
-            <em> Let yours start with ExplorePK.</em>
+            Every great journey starts with a single
+            decision.
+            <em>
+              {" "}Let yours start with ExplorePK.
+            </em>
           </p>
 
-          <span>✦</span>
+          <span>
+            ✦
+          </span>
+
         </div>
 
       </div>
 
-      {/* LOGIN / REGISTER POPUP */}
+      {/* ================= LOGIN / SIGNUP POPUP ================= */}
 
       {showAuth && (
+
         <div className="auth-popup-overlay">
 
           <div className="auth-popup">
 
             <button
               className="auth-popup-close"
-              onClick={() => setShowAuth(false)}
+              onClick={() => {
+                setShowAuth(false);
+              }}
             >
               ×
             </button>
 
             <Auth
-              onLogin={(loggedInUser) => {
-                onLogin(loggedInUser);
-                setShowAuth(false);
-              }}
+              onLogin={handleAuthLogin}
             />
 
           </div>
 
         </div>
+
       )}
 
     </section>

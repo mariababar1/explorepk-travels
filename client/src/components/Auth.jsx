@@ -19,11 +19,18 @@ function Auth({ onLogin }) {
       const endpoint = isLogin ? "login" : "signup";
 
       const body = isLogin
-        ? { email, password }
-        : { name, email, password };
+        ? {
+            email,
+            password,
+          }
+        : {
+            name,
+            email,
+            password,
+          };
 
       const response = await fetch(
-        "https://explorepk-travels-backend.vercel.app/api/auth/" + endpoint,
+        `https://explorepk-travels-backend.vercel.app/api/auth/${endpoint}`,
         {
           method: "POST",
           headers: {
@@ -43,9 +50,14 @@ function Auth({ onLogin }) {
 
       localStorage.setItem("explorepkToken", data.token);
 
+      localStorage.setItem(
+        "explorepkUser",
+        JSON.stringify(data.user)
+      );
+
       setMessage(
         isLogin
-          ? "Welcome back, " + data.user.name + "!"
+          ? `Welcome back, ${data.user.name}!`
           : "Account created successfully!"
       );
 
@@ -55,6 +67,7 @@ function Auth({ onLogin }) {
 
     } catch (error) {
       console.error("Authentication Error:", error);
+
       setMessage("Unable to connect to server.");
     }
 
@@ -63,6 +76,7 @@ function Auth({ onLogin }) {
 
   return (
     <div className="auth-page">
+
       <div className="auth-card">
 
         <img
@@ -78,7 +92,9 @@ function Auth({ onLogin }) {
         </p>
 
         <h2>
-          {isLogin ? "Welcome Back" : "Begin Your Journey"}
+          {isLogin
+            ? "Welcome Back"
+            : "Begin Your Journey"}
         </h2>
 
         <p className="auth-description">
@@ -140,13 +156,18 @@ function Auth({ onLogin }) {
 
           {isLogin ? (
             <>
-              Don't have an account?
+              <span>
+                Don't have an account?
+              </span>
 
               <button
                 type="button"
                 onClick={() => {
                   setIsLogin(false);
                   setMessage("");
+                  setName("");
+                  setEmail("");
+                  setPassword("");
                 }}
               >
                 Create Account
@@ -154,13 +175,18 @@ function Auth({ onLogin }) {
             </>
           ) : (
             <>
-              Already have an account?
+              <span>
+                Already have an account?
+              </span>
 
               <button
                 type="button"
                 onClick={() => {
                   setIsLogin(true);
                   setMessage("");
+                  setName("");
+                  setEmail("");
+                  setPassword("");
                 }}
               >
                 Login
@@ -171,6 +197,7 @@ function Auth({ onLogin }) {
         </div>
 
       </div>
+
     </div>
   );
 }
