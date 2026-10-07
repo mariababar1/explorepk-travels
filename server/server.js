@@ -5,11 +5,16 @@ require("dotenv").config();
 
 const Booking = require("./models/Booking");
 const authRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/admin");
 
 const app = express();
 
+// ================= MIDDLEWARE =================
+
 app.use(cors());
 app.use(express.json());
+
+// ================= MONGODB CONNECTION =================
 
 let mongoConnection = null;
 
@@ -49,11 +54,21 @@ app.use(async (req, res, next) => {
   }
 });
 
+// ================= AUTH ROUTES =================
+
 app.use("/api/auth", authRoutes);
+
+// ================= ADMIN ROUTES =================
+
+app.use("/api/admin", adminRoutes);
+
+// ================= HOME =================
 
 app.get("/", (req, res) => {
   res.send("ExplorePK Travel Server is Running!");
 });
+
+// ================= CREATE BOOKING =================
 
 app.post("/api/bookings", async (req, res) => {
   try {
@@ -77,15 +92,21 @@ app.post("/api/bookings", async (req, res) => {
   }
 });
 
+// ================= GET BOOKINGS =================
+
 app.get("/api/bookings", async (req, res) => {
   try {
-    const bookings = await Booking.find().sort({ createdAt: -1 });
+    const bookings = await Booking.find().sort({
+      createdAt: -1,
+    });
 
     res.json({
       success: true,
       bookings,
     });
   } catch (error) {
+    console.log("Fetch Bookings Error:", error.message);
+
     res.status(500).json({
       success: false,
       message: "Failed to fetch bookings",
@@ -94,12 +115,22 @@ app.get("/api/bookings", async (req, res) => {
   }
 });
 
+// ================= START SERVER =================
+
 if (require.main === module) {
   const PORT = 5000;
 
-  app.listen(PORT, () => {
+  app.listen(PORT, async () => {
     console.log(`Server running on http://localhost:${PORT}`);
+
+    try {
+      await connectDB();
+    } catch (error) {
+      console.log("MongoDB is NOT connected.");
+    }
   });
 }
+
+// ================= EXPORT APP =================
 
 module.exports = app;

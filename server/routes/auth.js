@@ -40,15 +40,17 @@ router.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-      name: name,
+      name,
       email: email.toLowerCase(),
       password: hashedPassword,
+      role: "user",
     });
 
     const token = jwt.sign(
       {
         id: user._id,
         email: user.email,
+        role: user.role,
       },
       process.env.JWT_SECRET,
       {
@@ -59,11 +61,12 @@ router.post("/signup", async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Account created successfully!",
-      token: token,
+      token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
@@ -116,6 +119,7 @@ router.post("/login", async (req, res) => {
       {
         id: user._id,
         email: user.email,
+        role: user.role,
       },
       process.env.JWT_SECRET,
       {
@@ -126,11 +130,12 @@ router.post("/login", async (req, res) => {
     return res.json({
       success: true,
       message: "Login successful!",
-      token: token,
+      token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
