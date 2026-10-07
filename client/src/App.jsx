@@ -1,4 +1,5 @@
 import PremiumFeatures from "./components/PremiumFeatures";
+import AITravelAssistant from "./components/AITravelAssistant";
 import { useEffect, useState } from "react";
 
 import Navbar from "./components/Navbar";
@@ -18,7 +19,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-console.log("CURRENT USER:", user);
+  console.log("CURRENT USER:", user);
+
   const [showTopButton, setShowTopButton] = useState(false);
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
 
@@ -245,6 +247,10 @@ console.log("CURRENT USER:", user);
           ↑
         </button>
       )}
+
+      {/* AI TRAVEL ASSISTANT */}
+
+      <AITravelAssistant />
     </>
   );
 }
