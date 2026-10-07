@@ -19,10 +19,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  console.log("CURRENT USER:", user);
-
   const [showTopButton, setShowTopButton] = useState(false);
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
+
+  console.log("CURRENT USER:", user);
 
   // ================= LOADING =================
 
@@ -82,11 +82,7 @@ function App() {
 
   // ================= ADMIN DASHBOARD =================
 
-  if (
-    showAdminDashboard &&
-    user &&
-    user.role === "admin"
-  ) {
+  if (showAdminDashboard) {
     return (
       <AdminDashboard
         onBackToWebsite={() => {
@@ -209,20 +205,19 @@ function App() {
 
       {/* ADMIN DASHBOARD BUTTON */}
 
-      {user && user.role === "admin" && (
-        <button
-          className="admin-dashboard-access"
-          onClick={() => {
-            setShowAdminDashboard(true);
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth",
-            });
-          }}
-        >
-          ⚙ Admin Dashboard
-        </button>
-      )}
+      <button
+        className="admin-dashboard-access"
+        onClick={() => {
+          setShowAdminDashboard(true);
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }}
+      >
+        ⚙ Admin Dashboard
+      </button>
 
       {/* WHATSAPP BUTTON */}
 

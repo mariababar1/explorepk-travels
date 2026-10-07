@@ -1,0 +1,618 @@
+/* ================================
+   EXPLOREPK ADMIN DASHBOARD
+================================ */
+
+.admin-layout {
+  min-height: 100vh;
+  display: flex;
+  background: #f5f6f8;
+  color: #222;
+  font-family: "Poppins", Arial, sans-serif;
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+
+.admin-sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background: #111111;
+  color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.12);
+}
+
+.admin-logo {
+  height: 95px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-logo-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d4af37;
+  color: #111;
+  font-size: 22px;
+}
+
+.admin-logo h2 {
+  margin: 0;
+  font-size: 21px;
+  color: #d4af37;
+}
+
+.admin-logo span {
+  display: block;
+  margin-top: 2px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #aaa;
+}
+
+/* ================================
+   NAVIGATION
+================================ */
+
+.admin-nav {
+  padding: 30px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.admin-nav a {
+  text-decoration: none;
+  color: #aaa;
+  padding: 13px 16px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 14px;
+  transition: 0.25s ease;
+}
+
+.admin-nav a span {
+  width: 20px;
+  text-align: center;
+  font-size: 17px;
+}
+
+.admin-nav a:hover {
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
+}
+
+.admin-nav a.active {
+  background: #d4af37;
+  color: #111;
+  font-weight: 600;
+}
+
+/* ================================
+   SIDEBAR BOTTOM
+================================ */
+
+.admin-sidebar-bottom {
+  margin-top: auto;
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-profile-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 17px;
+}
+
+.admin-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #d4af37;
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.admin-profile-mini strong {
+  display: block;
+  font-size: 13px;
+}
+
+.admin-profile-mini small {
+  display: block;
+  color: #999;
+  margin-top: 2px;
+  font-size: 11px;
+}
+
+.admin-logout {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: #bbb;
+  padding: 11px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.admin-logout:hover {
+  background: #d4af37;
+  color: #111;
+}
+
+/* ================================
+   MAIN
+================================ */
+
+.admin-main {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  min-height: 100vh;
+  padding: 0 35px 30px;
+}
+
+/* ================================
+   TOP BAR
+================================ */
+
+.admin-topbar {
+  height: 95px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.admin-breadcrumb {
+  margin: 0 0 4px;
+  color: #999;
+  font-size: 12px;
+}
+
+.admin-topbar h1 {
+  margin: 0;
+  font-size: 27px;
+  color: #171717;
+}
+
+.admin-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.admin-notification {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.admin-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-user strong {
+  display: block;
+  font-size: 13px;
+}
+
+.admin-user span {
+  display: block;
+  color: #999;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* ================================
+   WELCOME
+================================ */
+
+.admin-welcome {
+  margin-top: 25px;
+  padding: 25px 28px;
+  border-radius: 15px;
+  background: linear-gradient(
+    120deg,
+    #151515,
+    #282828
+  );
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.admin-welcome h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.admin-welcome p {
+  margin: 0;
+  color: #bbb;
+  font-size: 13px;
+}
+
+.admin-date {
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: #d4af37;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+/* ================================
+   STAT CARDS
+================================ */
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.admin-stat-card {
+  background: white;
+  padding: 21px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid #eee;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.04);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: rgba(212, 175, 55, 0.13);
+  color: #b38b13;
+}
+
+.admin-stat-card span {
+  display: block;
+  color: #888;
+  font-size: 11px;
+}
+
+.admin-stat-card h3 {
+  margin: 3px 0;
+  font-size: 25px;
+  color: #1a1a1a;
+}
+
+.admin-stat-card small {
+  color: #aaa;
+  font-size: 10px;
+}
+
+/* ================================
+   CONTENT GRID
+================================ */
+
+.admin-content-grid {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.admin-panel {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 15px;
+  padding: 23px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.04);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.panel-header p {
+  margin: 4px 0 0;
+  color: #999;
+  font-size: 11px;
+}
+
+.panel-badge {
+  background: rgba(46, 160, 67, 0.1);
+  color: #25873a;
+  padding: 6px 11px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* ================================
+   TABLE
+================================ */
+
+.booking-table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  text-align: left;
+  color: #999;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-table td {
+  padding: 13px 10px;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 12px;
+}
+
+.customer-cell {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.customer-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f1e5b9;
+  color: #806411;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.customer-cell strong {
+  display: block;
+  font-size: 11px;
+}
+
+.customer-cell small {
+  display: block;
+  color: #aaa;
+  font-size: 9px;
+  margin-top: 2px;
+}
+
+.destination-tag {
+  color: #555;
+  font-size: 11px;
+}
+
+.package-tag {
+  display: inline-block;
+  padding: 5px 9px;
+  background: #f7f4ea;
+  color: #8b711d;
+  border-radius: 5px;
+  font-size: 10px;
+}
+
+/* ================================
+   DESTINATIONS
+================================ */
+
+.destination-list {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+
+.destination-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.destination-rank {
+  width: 29px;
+  height: 29px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #777;
+}
+
+.destination-info {
+  flex: 1;
+}
+
+.destination-info strong {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+
+.destination-progress {
+  height: 6px;
+  width: 100%;
+  background: #eee;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.destination-progress span {
+  height: 100%;
+  display: block;
+  background: #d4af37;
+  border-radius: 20px;
+}
+
+.destination-count {
+  text-align: right;
+  min-width: 50px;
+}
+
+.destination-count strong {
+  display: block;
+  font-size: 14px;
+}
+
+.destination-count small {
+  display: block;
+  color: #aaa;
+  font-size: 8px;
+}
+
+/* ================================
+   FOOTER
+================================ */
+
+.admin-footer {
+  margin-top: 25px;
+  padding: 15px 5px;
+  display: flex;
+  justify-content: space-between;
+  color: #999;
+  font-size: 10px;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 1100px) {
+
+  .admin-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-content-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 750px) {
+
+  .admin-sidebar {
+    width: 70px;
+  }
+
+  .admin-logo {
+    padding: 0;
+    justify-content: center;
+  }
+
+  .admin-logo > div:last-child,
+  .admin-nav a:not(.active)::after,
+  .admin-nav a {
+    font-size: 0;
+  }
+
+  .admin-nav a span {
+    font-size: 18px;
+  }
+
+  .admin-nav a {
+    justify-content: center;
+    padding: 14px;
+  }
+
+  .admin-profile-mini > div:last-child,
+  .admin-logout {
+    font-size: 0;
+  }
+
+  .admin-main {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+    padding: 0 15px 25px;
+  }
+
+  .admin-topbar-right {
+    gap: 8px;
+  }
+
+  .admin-user > div:last-child {
+    display: none;
+  }
+
+  .admin-welcome {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+}
+
+@media (max-width: 550px) {
+
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-topbar {
+    height: 80px;
+  }
+
+  .admin-topbar h1 {
+    font-size: 22px;
+  }
+
+  .admin-welcome h2 {
+    font-size: 17px;
+  }
+
+  .admin-footer {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+}

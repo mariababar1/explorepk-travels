@@ -4,6 +4,8 @@ import "./AITravelAssistant.css";
 function AITravelAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [messages, setMessages] = useState([
     {
       type: "ai",
@@ -17,45 +19,79 @@ function AITravelAssistant() {
     "Best family package?",
   ];
 
-  const handleQuickQuestion = (question) => {
+  const askAssistant = async (question) => {
+    if (!question.trim() || loading) return;
+
     setMessages((prev) => [
       ...prev,
       { type: "user", text: question },
-      {
-        type: "ai",
-        text: "Great choice! Our smart travel assistant will soon provide personalized recommendations based on your destination, budget, travel dates, and trip type. ✨",
-      },
     ]);
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/ai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: question,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Assistant unavailable");
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "ai",
+          text: data.reply,
+        },
+      ]);
+    } catch (error) {
+      console.error("Travel Assistant Error:", error);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "ai",
+          text: "Sorry! I'm having trouble connecting to the travel assistant. Please try again.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleQuickQuestion = (question) => {
+    askAssistant(question);
   };
 
   const handleSend = () => {
-    if (!message.trim()) return;
+    if (!message.trim() || loading) return;
 
-    setMessages((prev) => [
-      ...prev,
-      { type: "user", text: message },
-      {
-        type: "ai",
-        text: "Thanks for your question! 🤍 AI-powered personalized travel recommendations will be connected here.",
-      },
-    ]);
-
+    const currentMessage = message;
     setMessage("");
+
+    askAssistant(currentMessage);
   };
 
   return (
     <>
-      {/* Floating AI Button */}
       <button
         className="ai-assistant-button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Open AI Travel Assistant"
       >
-        <span className="ai-icon">✦</span>
+           <span className="ai-icon">🤖</span>
         <span className="ai-button-text">AI Travel Assistant</span>
       </button>
 
-      {/* AI Chat Window */}
       {isOpen && (
         <div className="ai-chat-window">
           <div className="ai-chat-header">
@@ -86,6 +122,12 @@ function AITravelAssistant() {
               </div>
             ))}
 
+            {loading && (
+              <div className="ai-message ai-bot-message">
+                Thinking... ✨
+              </div>
+            )}
+
             <div className="ai-quick-questions">
               <p>Try asking:</p>
 
@@ -93,6 +135,7 @@ function AITravelAssistant() {
                 <button
                   key={index}
                   onClick={() => handleQuickQuestion(question)}
+                  disabled={loading}
                 >
                   {question}
                 </button>
@@ -111,9 +154,12 @@ function AITravelAssistant() {
                   handleSend();
                 }
               }}
+              disabled={loading}
             />
 
-            <button onClick={handleSend}>➤</button>
+            <button onClick={handleSend} disabled={loading}>
+              ➤
+            </button>
           </div>
         </div>
       )}

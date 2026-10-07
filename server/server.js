@@ -6,6 +6,7 @@ require("dotenv").config();
 const Booking = require("./models/Booking");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
+const aiRoutes = require("./routes/ai");
 
 const app = express();
 
@@ -41,12 +42,23 @@ async function connectDB() {
   await mongoConnection;
 }
 
-// Make sure MongoDB is connected before ANY API request
+// ================= DATABASE MIDDLEWARE =================
+
+// AI and home routes do not need MongoDB
 app.use(async (req, res, next) => {
+  if (req.path === "/" || req.path.startsWith("/api/ai")) {
+    return next();
+  }
+
   try {
-    await connectDB();
+    if (mongoose.connection.readyState !== 1) {
+      await connectDB();
+    }
+
     next();
   } catch (error) {
+    console.log("Database middleware error:", error.message);
+
     return res.status(503).json({
       success: false,
       message: "Database connection failed.",
@@ -61,6 +73,10 @@ app.use("/api/auth", authRoutes);
 // ================= ADMIN ROUTES =================
 
 app.use("/api/admin", adminRoutes);
+
+// ================= AI ROUTES =================
+
+app.use("/api/ai", aiRoutes);
 
 // ================= HOME =================
 
